@@ -3,13 +3,22 @@ package com.santog.cookapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.santog.cookapp.ui.theme.CookAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,8 +27,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             CookAppTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF2F2F2)) {
+                    HomeLayout("Salad")
                 }
             }
         }
@@ -27,14 +36,48 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun HomeLayout(name: String) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .border(border = BorderStroke(width = 1.dp, color = Color.Black), shape = RoundedCornerShape(5.dp))
+    ) {
+        Image(
+            painterResource(R.drawable.salad),
+            "",
+            modifier = Modifier.height(300.dp).align(alignment = Alignment.CenterHorizontally),
+            contentScale = ContentScale.Crop
+        )
+        Row(modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "$name",
+                style = TextStyle(fontSize = 26.sp, fontWeight = FontWeight.SemiBold)
+            )
+        }
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+        Row(modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "150 calories",
+                style = TextStyle(fontSize = 17.sp)
+            )
+        }
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+        Row(modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "€5,90",
+                style = TextStyle(fontSize = 17.sp),
+                color = Color(0xFF85bb65)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     CookAppTheme {
-        Greeting("Android")
+        HomeLayout("Android")
     }
 }
