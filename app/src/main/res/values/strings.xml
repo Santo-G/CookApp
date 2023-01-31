@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CookApp</string>
+
+    <string name="recipe_list_fragment_title">Recipe List Fragment</string>
 </resources>
