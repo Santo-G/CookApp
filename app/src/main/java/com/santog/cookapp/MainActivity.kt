@@ -21,16 +21,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.santog.cookapp.navigation.HomeScreen
+import com.santog.cookapp.navigation.NavigationItem
+import com.santog.cookapp.navigation.RecipeListScreen
 import com.santog.cookapp.ui.theme.CookAppTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CookAppTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF2F2F2)) {
-                    HomeLayout("Salad")
+                    LandingPage("Salad", navController)
                 }
             }
         }
@@ -38,7 +47,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeLayout(name: String) {
+fun LandingPage(name: String, navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -46,6 +55,7 @@ fun HomeLayout(name: String) {
             .verticalScroll(rememberScrollState())
             .border(border = BorderStroke(width = 1.dp, color = Color.Black), shape = RoundedCornerShape(5.dp))
     ) {
+        NavigationGraph(navController)
         Image(
             painterResource(R.drawable.salad),
             "",
@@ -75,7 +85,7 @@ fun HomeLayout(name: String) {
         }
         Spacer(modifier = Modifier.padding(top = 5.dp))
         Button(
-            onClick = {},
+            onClick = { navController.navigate(NavigationItem.RecipeListScreen.screen_route) },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(
@@ -85,10 +95,25 @@ fun HomeLayout(name: String) {
     }
 }
 
+// Handle navigation graph
+// Specified the composable destinations that you should be able to navigate between
+@Composable
+fun NavigationGraph(navController: NavHostController) {
+    NavHost(navController, startDestination = NavigationItem.Home.screen_route) {
+        composable(NavigationItem.Home.screen_route) {
+            HomeScreen()
+        }
+        composable(NavigationItem.RecipeListScreen.screen_route) {
+            RecipeListScreen()
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    val navController = rememberNavController()
     CookAppTheme {
-        HomeLayout("Android")
+        LandingPage("Android", navController)
     }
 }
