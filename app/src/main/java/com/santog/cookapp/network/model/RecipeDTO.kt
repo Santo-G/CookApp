@@ -17,7 +17,7 @@ data class RecipeDTO(
     @SerializedName("featured_image")
     val featuredImage: String,
     @SerializedName("ingredients")
-    val ingredients: List<String>,
+    val ingredients: List<String>?,
     @SerializedName("long_date_added")
     val longDateAdded: Int,
     @SerializedName("long_date_updated")
