@@ -7,7 +7,7 @@ import androidx.annotation.Keep
 @Keep
 data class RecipeDTO(
     @SerializedName("cooking_instructions")
-    val cookingInstructions: Any,
+    val cookingInstructions: String?,
     @SerializedName("date_added")
     val dateAdded: String,
     @SerializedName("date_updated")
