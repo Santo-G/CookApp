@@ -5,9 +5,9 @@ package com.santog.cookapp.domain.util
  *  T -------->  RecipeDTO
  *  DomainModel --->  Recipe
  */
-interface DomainMapper <T, DomainModel> {
+interface DomainMapper<T, DomainModel> {
 
-    fun mapToDomainModel(model : T) : DomainModel
-    fun mapFromDomainModel(domainModel : DomainModel) : T
+    fun mapToDomainModel(model: T): DomainModel
+    fun mapFromDomainModel(domainModel: DomainModel): T
 
 }

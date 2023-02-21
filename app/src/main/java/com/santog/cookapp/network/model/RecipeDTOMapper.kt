@@ -25,7 +25,7 @@ class RecipeDTOMapper : DomainMapper<RecipeDTO, Recipe> {
     }
 
     override fun mapFromDomainModel(domainModel: Recipe): RecipeDTO {
-        return RecipeDTO (
+        return RecipeDTO(
             cookingInstructions = domainModel.cooking_instructions,
             dateAdded = domainModel.date_added,
             dateUpdated = domainModel.date_updated,
@@ -42,13 +42,13 @@ class RecipeDTOMapper : DomainMapper<RecipeDTO, Recipe> {
         )
     }
 
-    fun fromEntityList(initial : List<RecipeDTO>) : List<Recipe> {
+    fun fromEntityList(initial: List<RecipeDTO>): List<Recipe> {
         return initial.map { recipeDTO ->
             mapToDomainModel(recipeDTO)
         }
     }
 
-    fun toEntityList(initial : List<Recipe>) : List<RecipeDTO> {
+    fun toEntityList(initial: List<Recipe>): List<RecipeDTO> {
         return initial.map { recipe ->
             mapFromDomainModel(recipe)
         }
