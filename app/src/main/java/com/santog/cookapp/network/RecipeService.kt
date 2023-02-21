@@ -1,7 +1,7 @@
 package com.santog.cookapp.network
 
 import com.santog.cookapp.network.model.RecipeDTO
-import com.santog.cookapp.network.responses.ResponseDTO
+import com.santog.cookapp.network.response.ResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

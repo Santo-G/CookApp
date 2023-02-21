@@ -1,30 +1,30 @@
 package com.santog.cookapp.network.model
 
 import com.santog.cookapp.domain.model.Recipe
-import com.santog.cookapp.domain.util.EntityMapper
+import com.santog.cookapp.domain.util.DomainMapper
 
 
-class RecipeNetworkMapper : EntityMapper<RecipeDTO, Recipe> {
+class RecipeDTOMapper : DomainMapper<RecipeDTO, Recipe> {
 
-    override fun mapFromEntity(entity: RecipeDTO): Recipe {
+    override fun mapToDomainModel(model: RecipeDTO): Recipe {
         return Recipe(
-            cooking_instructions = entity.cookingInstructions,
-            date_added = entity.dateAdded,
-            date_updated = entity.dateUpdated,
-            description = entity.description,
-            featured_image = entity.featuredImage,
-            ingredients = entity.ingredients ?: listOf(),
-            long_date_added = entity.longDateAdded,
-            long_date_updated = entity.longDateUpdated,
-            pk = entity.pk,
-            publisher = entity.publisher,
-            rating = entity.rating,
-            source_url = entity.sourceUrl,
-            title = entity.title
+            cooking_instructions = model.cookingInstructions,
+            date_added = model.dateAdded,
+            date_updated = model.dateUpdated,
+            description = model.description,
+            featured_image = model.featuredImage,
+            ingredients = model.ingredients ?: listOf(),
+            long_date_added = model.longDateAdded,
+            long_date_updated = model.longDateUpdated,
+            pk = model.pk,
+            publisher = model.publisher,
+            rating = model.rating,
+            source_url = model.sourceUrl,
+            title = model.title
         )
     }
 
-    override fun mapToEntity(domainModel: Recipe): RecipeDTO {
+    override fun mapFromDomainModel(domainModel: Recipe): RecipeDTO {
         return RecipeDTO (
             cookingInstructions = domainModel.cooking_instructions,
             dateAdded = domainModel.date_added,
@@ -44,13 +44,13 @@ class RecipeNetworkMapper : EntityMapper<RecipeDTO, Recipe> {
 
     fun fromEntityList(initial : List<RecipeDTO>) : List<Recipe> {
         return initial.map { recipeDTO ->
-            mapFromEntity(recipeDTO)
+            mapToDomainModel(recipeDTO)
         }
     }
 
     fun toEntityList(initial : List<Recipe>) : List<RecipeDTO> {
         return initial.map { recipe ->
-            mapToEntity(recipe)
+            mapFromDomainModel(recipe)
         }
     }
 

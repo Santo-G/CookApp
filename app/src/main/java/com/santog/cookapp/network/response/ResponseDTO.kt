@@ -1,4 +1,4 @@
-package com.santog.cookapp.network.responses
+package com.santog.cookapp.network.response
 
 
 import com.google.gson.annotations.SerializedName
