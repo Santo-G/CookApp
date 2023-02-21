@@ -1,4 +1,4 @@
-package com.santog.cookapp.ui.theme
+package com.santog.cookapp.view.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
