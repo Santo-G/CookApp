@@ -1,4 +1,4 @@
-package com.santog.cookapp
+package com.santog.cookapp.presentation.ui
 
 import android.content.Context
 import android.graphics.Canvas

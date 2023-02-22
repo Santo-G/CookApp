@@ -1,7 +1,7 @@
 package com.santog.cookapp.di
 
 import android.content.Context
-import com.santog.cookapp.CookApplication
+import com.santog.cookapp.presentation.CookApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

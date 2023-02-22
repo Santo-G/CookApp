@@ -1,8 +1,9 @@
-package com.santog.cookapp
+package com.santog.cookapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -17,9 +18,14 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
-import com.santog.cookapp.view.theme.CookAppTheme
+import com.santog.cookapp.presentation.theme.CookAppTheme
+import com.santog.cookapp.presentation.ui.RecipeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    val viewModel : RecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

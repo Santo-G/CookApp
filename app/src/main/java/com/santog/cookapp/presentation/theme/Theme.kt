@@ -1,4 +1,4 @@
-package com.santog.cookapp.view.theme
+package com.santog.cookapp.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
