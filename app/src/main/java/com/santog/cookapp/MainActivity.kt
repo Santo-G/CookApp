@@ -1,4 +1,4 @@
-package com.santog.cookapp.presentation
+package com.santog.cookapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
