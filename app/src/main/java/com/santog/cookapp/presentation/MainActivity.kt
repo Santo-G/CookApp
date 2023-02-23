@@ -29,6 +29,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        access viewModel parameters
+//        viewModel.getRepository()
+//        viewModel.getToken()
         setContent {
             CookAppTheme {
                 val navController = rememberNavController()
