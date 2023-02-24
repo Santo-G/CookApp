@@ -1,6 +1,7 @@
 package com.santog.cookapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -20,12 +21,13 @@ import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
+import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    val viewModel : RecipeViewModel by viewModels()
+    private val viewModel: RecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +39,20 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF2F2F2)) {
-                    LandingPage("Salad", navController)
+                    LandingPage("Salad", navController, viewModel)
                 }
             }
         }
     }
+
 }
 
 @Composable
-fun LandingPage(name: String, navController: NavHostController) {
+fun LandingPage(name: String, navController: NavHostController, viewModel: RecipeViewModel) {
+
+    val recipes = viewModel.recipes.value
+    Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
+
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -76,6 +83,6 @@ fun NavigationGraph(navController: NavHostController) {
 fun DefaultPreview() {
     val navController = rememberNavController()
     CookAppTheme {
-        LandingPage("Android", navController)
+        // LandingPage("Android", navController, viewModel)
     }
 }
