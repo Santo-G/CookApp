@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
+import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
 import com.santog.cookapp.util.TAG
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF2F2F2)) {
-                    LandingPage("Salad", navController, viewModel)
+                    LandingPage("", navController, viewModel)
                 }
             }
         }
@@ -53,7 +56,15 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
     val recipes = viewModel.recipes.value
     Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
 
-    Scaffold { padding ->
+    LazyColumn{
+        itemsIndexed(
+            items = recipes
+        ) { index, recipe ->
+            RecipeCard(recipe = recipe, onClick = {})
+        }
+    }
+
+    /*Scaffold { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,7 +72,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
         ) {
             NavigationGraph(navController)
         }
-    }
+    }*/
 }
 
 // Handle navigation graph
@@ -78,7 +89,7 @@ fun NavigationGraph(navController: NavHostController) {
     }
 }
 
-@Preview(showBackground = true)
+// @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
