@@ -9,11 +9,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.santog.cookapp.R
 import com.santog.cookapp.domain.model.Recipe
+import com.santog.cookapp.util.DEFAULT_RECIPE_IMAGE
+import com.santog.cookapp.util.loadPicture
 
 @Composable
 fun RecipeCard(
@@ -33,21 +39,24 @@ fun RecipeCard(
     ) {
         Column {
             recipe.featured_image.let { url ->
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(225.dp),
-                    painter = painterResource(id = R.drawable.empty_plate),
-                    contentDescription = "Default empty plate image shown",
-                    contentScale = ContentScale.Crop
-                )
+                val image = loadPicture(url = url, defaultImage = DEFAULT_RECIPE_IMAGE).value
+                image?.let { img ->
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(225.dp),
+                        bitmap = img.asImageBitmap(),
+                        contentDescription = "Default empty plate image shown",
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
             recipe.title.let { title ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
-                ){
+                ) {
                     Text(
                         text = title,
                         modifier = Modifier
