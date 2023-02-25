@@ -10,14 +10,14 @@ interface RecipeService {
 
     @GET("search")
     suspend fun search(
-        @Header("Autorization") token: String,
+        @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("query") query: String
     ): ResponseDTO
 
     @GET("get")
     suspend fun get(
-        @Header("Autorization") token: String,
+        @Header("Authorization") token: String,
         @Query("id") id: Int
     ): RecipeDTO
 
