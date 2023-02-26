@@ -2,6 +2,7 @@ package com.santog.cookapp.presentation.ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santog.cookapp.domain.model.Recipe
@@ -19,6 +20,7 @@ class RecipeViewModel
 ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(ArrayList())
+    val query = mutableStateOf("Input")
 
     init {
         newSearch()
@@ -33,6 +35,11 @@ class RecipeViewModel
             )
             recipes.value = result
         }
+    }
+
+    // function to manage textfield input persistence when UI configuration changes
+    fun onQueryChanged(newQuery: String) {
+        this.query.value = newQuery
     }
 
 }
