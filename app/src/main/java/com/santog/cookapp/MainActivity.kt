@@ -10,10 +10,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,13 +59,26 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
 
     val recipes = viewModel.recipes.value
     Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
+    val query = viewModel.query.value
 
-    LazyColumn{
-        itemsIndexed(
-            items = recipes
-        ) { index, recipe ->
-            RecipeCard(recipe = recipe, onClick = {})
+    Column {
+        // user input
+        TextField(
+            value = query,
+            onValueChange = { input ->
+                viewModel.onQueryChanged(input)
+            },
+        )
+        Spacer(modifier = Modifier.padding(10.dp))
+
+        LazyColumn {
+            itemsIndexed(
+                items = recipes
+            ) { index, recipe ->
+                RecipeCard(recipe = recipe, onClick = {})
+            }
         }
+
     }
 
     /*Scaffold { padding ->
