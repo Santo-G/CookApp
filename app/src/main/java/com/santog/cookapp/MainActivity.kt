@@ -8,15 +8,19 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.TextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,6 +32,7 @@ import com.santog.cookapp.navigation.RecipeListScreen
 import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
+import com.santog.cookapp.presentation.ui.getAllFoodCategories
 import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,9 +43,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        access viewModel parameters
-//        viewModel.getRepository()
-//        viewModel.getToken()
         setContent {
             CookAppTheme {
                 val navController = rememberNavController()
@@ -54,23 +56,73 @@ class MainActivity : ComponentActivity() {
 
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LandingPage(name: String, navController: NavHostController, viewModel: RecipeViewModel) {
 
     val recipes = viewModel.recipes.value
     Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
     val query = viewModel.query.value
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column {
-        // user input
-        TextField(
-            value = query,
-            onValueChange = { input ->
-                viewModel.onQueryChanged(input)
-            },
-        )
-        Spacer(modifier = Modifier.padding(10.dp))
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = 8.dp,
+            color = MaterialTheme.colors.primary
+        ) {
+            Column {
 
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // user input
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(8.dp),
+                        value = query,
+                        onValueChange = { input ->
+                            viewModel.onQueryChanged(input)
+                        },
+                        label = {
+                            Text(text = "Search")
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Filled.Search, "search icon")
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Search  // icon at the bottom right of keyboard
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                viewModel.newSearch(query)
+                                keyboardController?.hide()
+                            }
+                        ),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colors.onSurface, // color designed to be on top of "surface" color
+                            background = MaterialTheme.colors.surface   // predefined color in Material theme
+                        ),
+                    )
+                }
+
+                ScrollableTabRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedTabIndex = 0
+                ) {
+                    for (category in getAllFoodCategories()) {
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = category.value,
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.secondary
+                        )
+                    }
+                }
+            }
+        }
         LazyColumn {
             itemsIndexed(
                 items = recipes
@@ -78,10 +130,10 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 RecipeCard(recipe = recipe, onClick = {})
             }
         }
-
     }
 
-    /*Scaffold { padding ->
+    /*
+    Scaffold { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +141,8 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
         ) {
             NavigationGraph(navController)
         }
-    }*/
+    }
+    */
 }
 
 // Handle navigation graph
