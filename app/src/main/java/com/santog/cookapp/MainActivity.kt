@@ -32,6 +32,7 @@ import com.santog.cookapp.navigation.RecipeListScreen
 import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
+import com.santog.cookapp.presentation.ui.getAllFoodCategories
 import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,39 +71,56 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             elevation = 8.dp,
             color = MaterialTheme.colors.primary
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // user input
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .padding(8.dp),
-                    value = query,
-                    onValueChange = { input ->
-                        viewModel.onQueryChanged(input)
-                    },
-                    label = {
-                        Text(text = "Search")
-                    },
-                    leadingIcon = {
-                        Icon(Icons.Filled.Search, "search icon")
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Search  // icon at the bottom right of keyboard
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            viewModel.newSearch(query)
-                            keyboardController?.hide()
-                        }
-                    ),
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colors.onSurface, // color designed to be on top of "surface" color
-                        background = MaterialTheme.colors.surface   // predefined color in Material theme
-                    ),
-                )
+            Column {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // user input
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(8.dp),
+                        value = query,
+                        onValueChange = { input ->
+                            viewModel.onQueryChanged(input)
+                        },
+                        label = {
+                            Text(text = "Search")
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Filled.Search, "search icon")
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Search  // icon at the bottom right of keyboard
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                viewModel.newSearch(query)
+                                keyboardController?.hide()
+                            }
+                        ),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colors.onSurface, // color designed to be on top of "surface" color
+                            background = MaterialTheme.colors.surface   // predefined color in Material theme
+                        ),
+                    )
+                }
+
+                ScrollableTabRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedTabIndex = 0
+                ) {
+                    for (category in getAllFoodCategories()) {
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = category.value,
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.secondary
+                        )
+                    }
+                }
             }
         }
         LazyColumn {
