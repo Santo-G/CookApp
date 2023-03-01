@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
+import com.santog.cookapp.presentation.components.FoodCategoryChip
 import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
@@ -69,7 +70,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
         Surface(
             modifier = Modifier.fillMaxWidth(),
             elevation = 8.dp,
-            color = MaterialTheme.colors.primary
+            color = Color.White
         ) {
             Column {
 
@@ -113,16 +114,18 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                     selectedTabIndex = 0
                 ) {
                     for (category in getAllFoodCategories()) {
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = category.value,
-                            style = MaterialTheme.typography.body2,
-                            color = MaterialTheme.colors.secondary
+                        FoodCategoryChip(
+                            category = category.value,
+                            onExecuteSearch = {
+                                viewModel.onQueryChanged(it)
+                                viewModel.newSearch(it)
+                            }
                         )
                     }
                 }
             }
         }
+
         LazyColumn {
             itemsIndexed(
                 items = recipes
