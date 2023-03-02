@@ -1,6 +1,7 @@
 package com.santog.cookapp.presentation.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,13 +13,26 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FoodCategoryChip(
     category: String,
-    onExecuteSearch: (String) -> Unit
+    isSelected: Boolean = false,
+    onSelectedCategoryChanged: (String) -> Unit,
+    onExecuteSearch: () -> Unit
 ) {
     Chip(
-        onClick = { onExecuteSearch(category) },
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .toggleable(
+                value = isSelected,
+                onValueChange = { }
+            ),
+        onClick = {
+            onSelectedCategoryChanged(category)
+            onExecuteSearch()
+        },
         shape = MaterialTheme.shapes.medium,
-        colors = ChipDefaults.chipColors(MaterialTheme.colors.primary)
+        colors = if (isSelected)
+            ChipDefaults.chipColors(Color.LightGray)
+        else
+            ChipDefaults.chipColors(MaterialTheme.colors.primary)
     ) {
         Text(
             text = category,

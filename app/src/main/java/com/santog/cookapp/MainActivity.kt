@@ -65,6 +65,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
     Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
     val query = viewModel.query.value
     val keyboardController = LocalSoftwareKeyboardController.current
+    val selectedCategory = viewModel.selectedCategory.value
 
     Column {
         Surface(
@@ -94,11 +95,11 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Search  // icon at the bottom right of keyboard
+                            imeAction = ImeAction.Search  // icon at the bottom right of the keyboard
                         ),
                         keyboardActions = KeyboardActions(
                             onSearch = {
-                                viewModel.newSearch(query)
+                                viewModel.newSearch(/*query*/)
                                 keyboardController?.hide()
                             }
                         ),
@@ -110,16 +111,24 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 }
 
                 ScrollableTabRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    selectedTabIndex = 0
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, bottom = 8.dp),
+                    selectedTabIndex = 0,
+                    indicator = {}
                 ) {
                     for (category in getAllFoodCategories()) {
                         FoodCategoryChip(
                             category = category.value,
-                            onExecuteSearch = {
+                            isSelected = selectedCategory == category,
+                            onSelectedCategoryChanged = {
+                                viewModel.onSelectedCategoryChanged(it)
+                            },
+                            onExecuteSearch = viewModel::newSearch  // delegate the execution of onExecuteSearch to viewModel.newSearch function
+                            /*{
                                 viewModel.onQueryChanged(it)
                                 viewModel.newSearch(it)
-                            }
+                            }*/
                         )
                     }
                 }
