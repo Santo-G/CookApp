@@ -113,7 +113,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 ScrollableTabRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp, bottom = 8.dp),
+                        .padding(2.dp),
                     selectedTabIndex = 0,
                     indicator = {}
                 ) {
@@ -125,10 +125,6 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                                 viewModel.onSelectedCategoryChanged(it)
                             },
                             onExecuteSearch = viewModel::newSearch  // delegate the execution of onExecuteSearch to viewModel.newSearch function
-                            /*{
-                                viewModel.onQueryChanged(it)
-                                viewModel.newSearch(it)
-                            }*/
                         )
                     }
                 }
