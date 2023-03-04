@@ -14,6 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
+import com.santog.cookapp.presentation.components.FoodCategoryChip
 import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
@@ -64,12 +67,13 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
     Log.d(TAG, "CookApp Landing page recipes list size: ${recipes.size}")
     val query = viewModel.query.value
     val keyboardController = LocalSoftwareKeyboardController.current
+    val selectedCategory = viewModel.selectedCategory.value
 
     Column {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             elevation = 8.dp,
-            color = MaterialTheme.colors.primary
+            color = Color.White
         ) {
             Column {
 
@@ -93,11 +97,11 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Search  // icon at the bottom right of keyboard
+                            imeAction = ImeAction.Search  // icon at the bottom right of the keyboard
                         ),
                         keyboardActions = KeyboardActions(
                             onSearch = {
-                                viewModel.newSearch(query)
+                                viewModel.newSearch(/*query*/)
                                 keyboardController?.hide()
                             }
                         ),
@@ -109,20 +113,27 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 }
 
                 ScrollableTabRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    selectedTabIndex = 0
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.dp),
+                    selectedTabIndex = viewModel.getCategoryScrollPosition(),
+                    indicator = {}
                 ) {
                     for (category in getAllFoodCategories()) {
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = category.value,
-                            style = MaterialTheme.typography.body2,
-                            color = MaterialTheme.colors.secondary
+                        FoodCategoryChip(
+                            category = category.value,
+                            isSelected = selectedCategory == category,
+                            onSelectedCategoryChanged = { selectedCategory ->
+                                viewModel.onSelectedCategoryChanged(selectedCategory)
+                                viewModel.onChangeCategoryScrollPosition(getAllFoodCategories().indexOf(category))
+                            },
+                            onExecuteSearch = viewModel::newSearch  // delegate the execution of onExecuteSearch to viewModel.newSearch function
                         )
                     }
                 }
             }
         }
+
         LazyColumn {
             itemsIndexed(
                 items = recipes

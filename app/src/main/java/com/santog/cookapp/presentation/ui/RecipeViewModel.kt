@@ -21,25 +21,41 @@ class RecipeViewModel
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(ArrayList())
     val query = mutableStateOf("")
+    val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
+    private var categoryScrollPosition: Int = 0
 
     init {
-        newSearch("Chicken")
+        newSearch()
     }
 
-    fun newSearch(query: String) {
+    fun newSearch() {
         viewModelScope.launch {
             val result = repository.search(
                 token = token,
                 page = 1,
-                query = query
+                query = query.value
             )
             recipes.value = result
         }
     }
 
-    // function to manage textfield input persistence when UI configuration changes
+    // function to manage textfield input persistence when the UI configuration changes
     fun onQueryChanged(newQuery: String) {
         this.query.value = newQuery
+    }
+
+    fun onSelectedCategoryChanged(category: String) {
+        val newCategory = getFoodCategory(category)
+        selectedCategory.value = newCategory
+        onQueryChanged(category)
+    }
+
+    fun onChangeCategoryScrollPosition(position: Int) {
+        categoryScrollPosition = position
+    }
+
+    fun getCategoryScrollPosition(): Int {
+        return categoryScrollPosition
     }
 
 }
