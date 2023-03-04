@@ -14,6 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -114,15 +116,16 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(2.dp),
-                    selectedTabIndex = 0,
+                    selectedTabIndex = viewModel.getCategoryScrollPosition(),
                     indicator = {}
                 ) {
                     for (category in getAllFoodCategories()) {
                         FoodCategoryChip(
                             category = category.value,
                             isSelected = selectedCategory == category,
-                            onSelectedCategoryChanged = {
-                                viewModel.onSelectedCategoryChanged(it)
+                            onSelectedCategoryChanged = { selectedCategory ->
+                                viewModel.onSelectedCategoryChanged(selectedCategory)
+                                viewModel.onChangeCategoryScrollPosition(getAllFoodCategories().indexOf(category))
                             },
                             onExecuteSearch = viewModel::newSearch  // delegate the execution of onExecuteSearch to viewModel.newSearch function
                         )
