@@ -8,22 +8,12 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,11 +21,10 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
-import com.santog.cookapp.presentation.components.FoodCategoryChip
 import com.santog.cookapp.presentation.components.RecipeCard
+import com.santog.cookapp.presentation.components.SearchAppBar
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
-import com.santog.cookapp.presentation.ui.getAllFoodCategories
 import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,69 +59,17 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
     val selectedCategory = viewModel.selectedCategory.value
 
     Column {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = 8.dp,
-            color = Color.White
-        ) {
-            Column {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // user input
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(8.dp),
-                        value = query,
-                        onValueChange = { input ->
-                            viewModel.onQueryChanged(input)
-                        },
-                        label = {
-                            Text(text = "Search")
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Filled.Search, "search icon")
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Search  // icon at the bottom right of the keyboard
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onSearch = {
-                                viewModel.newSearch(/*query*/)
-                                keyboardController?.hide()
-                            }
-                        ),
-                        textStyle = TextStyle(
-                            color = MaterialTheme.colors.onSurface, // color designed to be on top of "surface" color
-                            background = MaterialTheme.colors.surface   // predefined color in Material theme
-                        ),
-                    )
-                }
-
-                ScrollableTabRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(2.dp),
-                    selectedTabIndex = viewModel.getCategoryScrollPosition(),
-                    indicator = {}
-                ) {
-                    for (category in getAllFoodCategories()) {
-                        FoodCategoryChip(
-                            category = category.value,
-                            isSelected = selectedCategory == category,
-                            onSelectedCategoryChanged = { selectedCategory ->
-                                viewModel.onSelectedCategoryChanged(selectedCategory)
-                                viewModel.onChangeCategoryScrollPosition(getAllFoodCategories().indexOf(category))
-                            },
-                            onExecuteSearch = viewModel::newSearch  // delegate the execution of onExecuteSearch to viewModel.newSearch function
-                        )
-                    }
-                }
-            }
-        }
+        SearchAppBar(
+            query = query,
+            onQueryChanged = viewModel::onQueryChanged,     // delegate the execution to viewModel function
+            onExecuteSearch = viewModel::newSearch,     // delegate the execution to viewModel function
+            keyboardController = keyboardController,
+            categoryScrollPosition = viewModel.getCategoryScrollPosition(),
+            selectedCategory = selectedCategory,
+            onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,   // delegate the execution to viewModel function
+            onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition  // delegate the execution to viewModel function
+        )
 
         LazyColumn {
             itemsIndexed(
