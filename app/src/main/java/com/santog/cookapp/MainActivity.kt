@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
+import com.santog.cookapp.presentation.components.CircularIndeterminateProgressBar
 import com.santog.cookapp.presentation.components.RecipeCard
 import com.santog.cookapp.presentation.components.SearchAppBar
 import com.santog.cookapp.presentation.theme.CookAppTheme
@@ -57,6 +58,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
     val query = viewModel.query.value
     val keyboardController = LocalSoftwareKeyboardController.current
     val selectedCategory = viewModel.selectedCategory.value
+    val loading = viewModel.loading.value
 
     Column {
 
@@ -71,12 +73,18 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition  // delegate the execution to viewModel function
         )
 
-        LazyColumn {
-            itemsIndexed(
-                items = recipes
-            ) { index, recipe ->
-                RecipeCard(recipe = recipe, onClick = {})
+        // Box lets you overlay composables one over to another
+        Box(modifier = Modifier.fillMaxSize()){
+            LazyColumn {
+                itemsIndexed(
+                    items = recipes
+                ) { index, recipe ->
+                    RecipeCard(recipe = recipe, onClick = {})
+                }
             }
+            // Hierarchy in Compose: lower in composable is on top and viceversa
+            // CircularIndeterminateProgressBar put as bottom element would be shown (overlay on top of LazyColumn)
+            CircularIndeterminateProgressBar(isDisplayed = loading)
         }
     }
 
