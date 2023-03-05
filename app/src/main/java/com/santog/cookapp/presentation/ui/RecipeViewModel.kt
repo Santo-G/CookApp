@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.santog.cookapp.domain.model.Recipe
 import com.santog.cookapp.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -23,6 +24,7 @@ class RecipeViewModel
     val query = mutableStateOf("")
     val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
     private var categoryScrollPosition: Int = 0
+    val loading = mutableStateOf(false)
 
     init {
         newSearch()
@@ -30,12 +32,16 @@ class RecipeViewModel
 
     fun newSearch() {
         viewModelScope.launch {
+            loading.value = true
+            resetSearchState()
+            // delay(2000)
             val result = repository.search(
                 token = token,
                 page = 1,
                 query = query.value
             )
             recipes.value = result
+            loading.value = false
         }
     }
 
@@ -56,6 +62,17 @@ class RecipeViewModel
 
     fun getCategoryScrollPosition(): Int {
         return categoryScrollPosition
+    }
+
+    private fun clearSelectedCategory() {
+        selectedCategory.value = null
+    }
+
+    private fun resetSearchState() {
+        recipes.value = listOf()
+        if (selectedCategory.value?.value != query.value) {
+            clearSelectedCategory()
+        }
     }
 
 }
