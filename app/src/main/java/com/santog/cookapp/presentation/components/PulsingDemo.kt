@@ -2,12 +2,16 @@ package com.santog.cookapp.presentation.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 
@@ -59,12 +63,23 @@ object PulseAnimationDefinitions {
         val color = MaterialTheme.colors.primary
 
         val infiniteTransition = rememberInfiniteTransition()
-        val scale1 = infiniteTransition.animateFloat(
+        val pulse = infiniteTransition.animateFloat(
             40f,
             50f,
             // No offset for the 1st animation
             infiniteRepeatable(tween(600), RepeatMode.Restart)
         )
+
+        Row(
+            modifier = Modifier.fillMaxWidth().height(55.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "image",
+                modifier = Modifier.align(Alignment.CenterVertically).height(pulse.value.dp).width(pulse.value.dp)
+            )
+        }
 
         Canvas(
             modifier = Modifier
@@ -72,7 +87,7 @@ object PulseAnimationDefinitions {
                 .height(55.dp)
         ){
             drawCircle(
-                radius = scale1.value,
+                radius = pulse.value,
                 brush = SolidColor(color)
             )
 
