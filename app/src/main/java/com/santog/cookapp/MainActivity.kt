@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -74,6 +76,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition  // delegate the execution to viewModel function
         )
 
+/*      for test purposes only
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,12 +84,12 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 .align(alignment = Alignment.CenterHorizontally)
         ) {
             // PulsingDemo()
-            HeartButton()
-        }
+            // HeartButton()
+        }*/
 
 
         // Box lets you overlay composables one over to another
-        /*Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier.fillMaxSize()){
             LazyColumn {
                 itemsIndexed(
                     items = recipes
@@ -97,7 +100,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             // Hierarchy in Compose: lower in composable is on top and viceversa
             // CircularIndeterminateProgressBar put as bottom element would be shown (overlay on top of LazyColumn)
             CircularIndeterminateProgressBar(isDisplayed = loading)
-        }*/
+        }
     }
 
     /*
