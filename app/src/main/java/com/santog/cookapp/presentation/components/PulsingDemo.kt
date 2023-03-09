@@ -61,7 +61,6 @@ object PulseAnimationDefinitions {
     @Composable
     fun PulsingDemo() {
         val color = MaterialTheme.colors.primary
-
         val infiniteTransition = rememberInfiniteTransition()
         val pulse = infiniteTransition.animateFloat(
             40f,
