@@ -1,6 +1,7 @@
 package com.santog.cookapp.presentation.components
 import androidx.compose.animation.*
 import androidx.compose.animation.core.EaseInOutCubic
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -41,14 +42,14 @@ fun HeartButton() {
                     fadeIn(
                         animationSpec = tween(
                             durationMillis = animationDurationMs / 2,
-                            easing = EaseInOutCubic
+                            easing = LinearEasing
                         )
                     ) + scaleIn(
                         animationSpec = keyframes {
                             durationMillis = animationDurationMs
-                            1f at 0 with EaseInOutCubic
-                            overshootFactor at animationDurationMs / 2 with EaseInOutCubic
-                            1f at animationDurationMs with EaseInOutCubic
+                            1f at 0 with LinearEasing
+                            overshootFactor at animationDurationMs / 2 with LinearEasing
+                            1f at animationDurationMs with LinearEasing
                         }
                     ) with fadeOut() using SizeTransform(clip = false)
             }
