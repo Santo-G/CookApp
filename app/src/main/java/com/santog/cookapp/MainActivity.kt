@@ -81,18 +81,7 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
                 .align(alignment = Alignment.CenterHorizontally)
         ) {
             // PulsingDemo()
-/*            val state = remember { mutableStateOf(HeartButtonState.IDLE) }
-            HeartButtonAnimation(
-                state,
-                onToggle = {
-                    state.value =
-                        if (state.value == HeartButtonState.IDLE)
-                            HeartButtonState.ACTIVE
-                        else
-                            HeartButtonState.IDLE
-                }
-            )*/
-            // HeartButtonAnimation()
+            HeartButton()
         }
 
 
