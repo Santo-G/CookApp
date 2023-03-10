@@ -10,10 +10,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,13 +25,12 @@ import androidx.navigation.compose.rememberNavController
 import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
-import com.santog.cookapp.presentation.components.CircularIndeterminateProgressBar
-import com.santog.cookapp.presentation.components.RecipeCard
-import com.santog.cookapp.presentation.components.SearchAppBar
+import com.santog.cookapp.presentation.components.*
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
 import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.internal.schedulers.ExecutorScheduler.ExecutorWorker
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -72,6 +75,18 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,   // delegate the execution to viewModel function
             onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition  // delegate the execution to viewModel function
         )
+
+/*      for test purposes only
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .align(alignment = Alignment.CenterHorizontally)
+        ) {
+            // PulsingDemo()
+            // HeartButton()
+        }*/
+
 
         // Box lets you overlay composables one over to another
         Box(modifier = Modifier.fillMaxSize()){

@@ -9,14 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.santog.cookapp.R
 import com.santog.cookapp.domain.model.Recipe
 import com.santog.cookapp.util.DEFAULT_RECIPE_IMAGE
 import com.santog.cookapp.util.loadPicture
