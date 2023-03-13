@@ -1,4 +1,4 @@
-package com.santog.cookapp.presentation.components
+package com.santog.cookapp.presentation.components.animations
 import androidx.compose.animation.*
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.keyframes
@@ -25,7 +25,7 @@ private enum class HeartButtonState {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun HeartButton() {
+fun HeartButtonAnimation() {
     var state by remember { mutableStateOf(HeartButtonState.IDLE) }
     val iconSize = 100.dp
     val overshootFactor = 1.3f
