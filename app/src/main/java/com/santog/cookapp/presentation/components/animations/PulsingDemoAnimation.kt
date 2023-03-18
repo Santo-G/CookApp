@@ -1,4 +1,4 @@
-package com.santog.cookapp.presentation.components
+package com.santog.cookapp.presentation.components.animations
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -11,11 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 
-object PulseAnimationDefinitions {
+object PulseAnimationDefinition {
     /*
         enum class PulseState {
             INITIAL,
@@ -59,7 +58,7 @@ object PulseAnimationDefinitions {
 }
 
     @Composable
-    fun PulsingDemo() {
+    fun PulsingDemoAnimation() {
         val color = MaterialTheme.colors.primary
         val infiniteTransition = rememberInfiniteTransition()
         val pulse = infiniteTransition.animateFloat(
