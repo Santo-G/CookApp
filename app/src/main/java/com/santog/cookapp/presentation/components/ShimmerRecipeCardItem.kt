@@ -5,10 +5,8 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
@@ -17,39 +15,44 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun shimmerRecipeCardItem(
-    colors: List<Color>,
     cardHeight: Dp,
     isLoading: Boolean,
-    modifier: Modifier
-){
-    val brush = Brush.linearGradient(
-        colors,
-        start = Offset(200f, 200f),
-        end = Offset(400f, 400f)
-    )
-
-
-
-    Surface(shape = MaterialTheme.shapes.small) {
-        Spacer(
+    contentAfterLoading: @Composable () -> Unit
+) {
+    if (isLoading) {
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(cardHeight)
-                .background(brush = brush)
-        )
+                .padding(
+                    bottom = 6.dp,
+                    top = 6.dp
+                ),
+            shape = MaterialTheme.shapes.small,
+            elevation = 8.dp
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(cardHeight)
+                    .shimmerEffect(),
+            )
+        }
+    } else {
+        contentAfterLoading()
     }
-
 }
 
-// composed{} --> compose custom stateful modifier
+// create a custom modifier to use shimmer effect on every type of Composable object
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
-
     val transition = rememberInfiniteTransition()
     val startOffsetX by transition.animateFloat(
         initialValue = -2 * size.width.toFloat(),
@@ -58,12 +61,18 @@ fun Modifier.shimmerEffect(): Modifier = composed {
             animation = tween(1000)
         )
     )
-
-    background(brush = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFFFFFFFF)
-        ),
-        start = Offset(200f, 200f),
-        end = Offset(400f, 400f)
-    ))
+    background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                Color(0xFFB8B5B5),
+                Color(0xFF8F8B8B),
+                Color(0xFFB8B5B5)
+            ),
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        )
+    )
+        .onGloballyPositioned {
+            size = it.size
+        }
 }

@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,11 +24,12 @@ import com.santog.cookapp.navigation.HomeScreen
 import com.santog.cookapp.navigation.NavigationItem
 import com.santog.cookapp.navigation.RecipeListScreen
 import com.santog.cookapp.presentation.components.*
+import com.santog.cookapp.presentation.components.animations.HeartButtonAnimation
 import com.santog.cookapp.presentation.theme.CookAppTheme
 import com.santog.cookapp.presentation.ui.RecipeViewModel
 import com.santog.cookapp.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.internal.schedulers.ExecutorScheduler.ExecutorWorker
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -76,20 +75,50 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             onChangeCategoryScrollPosition = viewModel::onChangeCategoryScrollPosition  // delegate the execution to viewModel function
         )
 
-/*      for test purposes only
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-                .align(alignment = Alignment.CenterHorizontally)
-        ) {
-            // PulsingDemo()
-            // HeartButton()
-        }*/
+        var isLoading by remember {
+            mutableStateOf(true)
+        }
+
+        // simulate delay
+        LaunchedEffect(key1 = true) {
+            delay(3000)
+            isLoading = false
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn {
+                itemsIndexed(
+                    items = recipes
+                ) { index, recipe ->
+                        shimmerRecipeCardItem(
+                            cardHeight = 320.dp,
+                            isLoading = isLoading,
+                            contentAfterLoading = {
+                                RecipeCard(recipe = recipe, onClick = {})
+                            }
+                        )
+                }
+            }
+            // Hierarchy in Compose: lower in composable is on top and viceversa
+            // CircularIndeterminateProgressBar put as bottom element would be shown (overlay on top of LazyColumn)
+            CircularIndeterminateProgressBar(isDisplayed = loading)
+        }
 
 
-        // Box lets you overlay composables one over to another
-        Box(modifier = Modifier.fillMaxSize()){
+              // for test purposes only
+/*                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                        .align(alignment = Alignment.CenterHorizontally)
+                ) {
+                    // PulsingDemoAnimation()
+                    //  HeartButtonAnimation()
+                }*/
+
+
+// Box lets you overlay composables one over to another
+        /*Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn {
                 itemsIndexed(
                     items = recipes
@@ -100,18 +129,18 @@ fun LandingPage(name: String, navController: NavHostController, viewModel: Recip
             // Hierarchy in Compose: lower in composable is on top and viceversa
             // CircularIndeterminateProgressBar put as bottom element would be shown (overlay on top of LazyColumn)
             CircularIndeterminateProgressBar(isDisplayed = loading)
-        }
+        }*/
     }
 
     /*
     Scaffold { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            NavigationGraph(navController)
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
+        NavigationGraph(navController)
+    }
     }
     */
 }
@@ -135,6 +164,6 @@ fun NavigationGraph(navController: NavHostController) {
 fun DefaultPreview() {
     val navController = rememberNavController()
     CookAppTheme {
-        // LandingPage("Android", navController, viewModel)
+// LandingPage("Android", navController, viewModel)
     }
 }
